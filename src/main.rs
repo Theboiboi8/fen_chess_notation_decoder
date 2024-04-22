@@ -7,15 +7,17 @@ fn main() {
         fs::read_to_string("fen_starting_position.txt")
             .unwrap_or_default();
 
-    let starting_pos_file_simplified =
-        fs::read_to_string("fen_starting_position_simplified.txt")
+    let starting_pos_file_stripped =
+        fs::read_to_string("fen_starting_position_stripped.txt")
             .unwrap_or_default();
 
+    let custom_fen = parser::Fen::from_string(starting_pos_file_stripped.as_str());
+
     println!("{starting_pos_file}");
-    println!("{starting_pos_file_simplified}");
+    println!();
+    println!("{starting_pos_file_stripped}");
+    println!();
     println!("{}", parser::Fen::default());
-
-    let custom_fen = parser::Fen::from_string(starting_pos_file_simplified.as_str());
-
+    println!();
     println!("{custom_fen}");
 }

@@ -69,7 +69,56 @@ impl Fen {
 					'Q' => row.pieces[i] = Piece::black_piece(PieceType::Queen),
 					'k' => row.pieces[i] = Piece::white_piece(PieceType::King),
 					'K' => row.pieces[i] = Piece::black_piece(PieceType::King),
-					'_' => row.pieces[i] = Piece::air(),
+					'_' | '1' => row.pieces[i] = Piece::air(),
+					'2' => {
+						row.pieces[i] = Piece::air();
+						row.pieces[i + 1] = Piece::air();
+					}
+					'3' => {
+						row.pieces[i] = Piece::air();
+						row.pieces[i + 1] = Piece::air();
+						row.pieces[i + 2] = Piece::air();
+					}
+					'4' => {
+						row.pieces[i] = Piece::air();
+						row.pieces[i + 1] = Piece::air();
+						row.pieces[i + 2] = Piece::air();
+						row.pieces[i + 3] = Piece::air();
+					}
+					'5' => {
+						row.pieces[i] = Piece::air();
+						row.pieces[i + 1] = Piece::air();
+						row.pieces[i + 2] = Piece::air();
+						row.pieces[i + 3] = Piece::air();
+						row.pieces[i + 4] = Piece::air();
+					}
+					'6' => {
+						row.pieces[i] = Piece::air();
+						row.pieces[i + 1] = Piece::air();
+						row.pieces[i + 2] = Piece::air();
+						row.pieces[i + 3] = Piece::air();
+						row.pieces[i + 4] = Piece::air();
+						row.pieces[i + 5] = Piece::air();
+					}
+					'7' => {
+						row.pieces[i] = Piece::air();
+						row.pieces[i + 1] = Piece::air();
+						row.pieces[i + 2] = Piece::air();
+						row.pieces[i + 3] = Piece::air();
+						row.pieces[i + 4] = Piece::air();
+						row.pieces[i + 5] = Piece::air();
+						row.pieces[i + 6] = Piece::air();
+					}
+					'8' => {
+						row.pieces[i] = Piece::air();
+						row.pieces[i + 1] = Piece::air();
+						row.pieces[i + 2] = Piece::air();
+						row.pieces[i + 3] = Piece::air();
+						row.pieces[i + 4] = Piece::air();
+						row.pieces[i + 5] = Piece::air();
+						row.pieces[i + 6] = Piece::air();
+						row.pieces[i + 7] = Piece::air();
+					}
 					_ => unreachable!("Unknown values in input FEN notation!")
 				}
 			}
