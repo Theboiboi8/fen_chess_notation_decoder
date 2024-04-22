@@ -69,7 +69,7 @@ impl Fen {
 					'Q' => row.pieces[i] = Piece::black_piece(PieceType::Queen),
 					'k' => row.pieces[i] = Piece::white_piece(PieceType::King),
 					'K' => row.pieces[i] = Piece::black_piece(PieceType::King),
-					'_' | '1' => row.pieces[i] = Piece::air(),
+					'1' => row.pieces[i] = Piece::air(),
 					'2' => {
 						row.pieces[i] = Piece::air();
 						row.pieces[i + 1] = Piece::air();
