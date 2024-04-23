@@ -3,20 +3,20 @@ use std::fmt::{Display, Formatter};
 pub struct Fen {
 	/// A vector of information for every row starting at index 0 up to index 7,
 	/// where the index maps to chessboard rows 1-8 starting at row 1 for index 0
-	rows: Vec<Row>
+	pub rows: Vec<Row>
 }
 
 #[derive(Clone)]
 pub struct Row {
 	/// A vector of information for every piece starting at index 0 up to index 7,
 	/// where the index maps to chessboard columns A-H starting at column A for index 0
-	pieces: Vec<Piece>
+	pub pieces: Vec<Piece>
 }
 
 #[derive(Copy, Clone, Eq, PartialEq)]
 pub struct Piece {
-	piece_type: PieceType,
-	color: PieceColor
+	pub piece_type: PieceType,
+	pub color: PieceColor
 }
 
 #[derive(Default, Copy, Clone, Eq, PartialEq)]
@@ -245,8 +245,9 @@ impl Display for Fen {
 impl Display for Row {
 	fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
 		let pieces = self.pieces.iter();
-		let mut count = 0;
+		let mut count: u16 = 0;
 		let mut last_was_empty = false;
+		let mut output_string= String::new();
 
 		for piece in pieces {
 			if piece.piece_type == PieceType::Empty {
@@ -254,15 +255,15 @@ impl Display for Row {
 				count += 1;
 			} else {
 				if last_was_empty {
-					write!(f, "{count}")?;
+					output_string.push_str(&count.to_string());
 					count = 0;
 				}
 				last_was_empty = false;
-				write!(f, "{piece}")?;
+				output_string.push_str(&piece.to_string());
 			}
 		}
 
-		write!(f, "")
+		write!(f, "{output_string}")
 	}
 }
 
