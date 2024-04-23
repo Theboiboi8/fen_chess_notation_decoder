@@ -25,7 +25,7 @@ fn main() {
 
     println!("--- WIKI EXAMPLE: STARTING POSITION ---");
     println!("{starting_position_file}");
-    
+
     println!("--- WIKI EXAMPLE: STARTING POSITION STRIPPED ---");
     println!("{starting_position_file_stripped}");
 
@@ -34,24 +34,19 @@ fn main() {
 
     println!("--- CHESS.COM: REAL GAME ---");
     println!("{chesscom_game_file}");
-    
+
     println!("--- FEN: DEFAULT ---");
     println!("{}", parser::Fen::default());
-    
+
     println!("--- FEN: STARTING POSITION ---");
     println!("{starting_position}");
-    
+
     println!("--- FEN: VARIETY TEST ---");
     println!("{variety_test}");
 
     println!("--- FEN: CHESS.COM GAME ---");
     println!("{chesscom_game}");
-    
+
     println!("--- ROW: EMPTY ---");
     println!("{}", parser::Row::empty());
-    
-    println!("--- ROW: LINE-BY-LINE ---");
-    for (i, row) in parser::Fen::default().rows.iter().enumerate() {
-        println!("{row}, {i}");
-    }
 }

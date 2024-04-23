@@ -45,63 +45,120 @@ impl Fen {
 	/// The rows in the FEN notation are separated by a `/`,
 	/// and as of right now king and queen status is not handled,
 	/// and neither is move count and side playing  
+	#[allow(clippy::too_many_lines)]
 	pub fn from_string(input: &str) -> Self {
+		println!("Parsing input: {input}");
+		
 		let mut rows = Vec::<Row>::with_capacity(8);
 		
 		for input_row in input.split('/') {
 			let mut row = Row::empty();
+			let mut last_index: Option<usize> = None;
 			
 			for (i, char) in input_row.chars().enumerate() {
 				assert!(i <= 7, "More than 8 characters provided in input row {input_row}");
 				
+				let index: usize = if last_index.is_none() {
+					i
+				} else {
+					#[allow(clippy::unnecessary_unwrap)]
+					last_index.unwrap()
+				};
+				
 				match char {
-					'p' => row.pieces[i] = Piece::white_piece(PieceType::Pawn),
-					'P' => row.pieces[i] = Piece::black_piece(PieceType::Pawn),
-					'r' => row.pieces[i] = Piece::white_piece(PieceType::Rook),
-					'R' => row.pieces[i] = Piece::black_piece(PieceType::Rook),
-					'n' => row.pieces[i] = Piece::white_piece(PieceType::Knight),
-					'N' => row.pieces[i] = Piece::black_piece(PieceType::Knight),
-					'b' => row.pieces[i] = Piece::white_piece(PieceType::Bishop),
-					'B' => row.pieces[i] = Piece::black_piece(PieceType::Bishop),
-					'q' => row.pieces[i] = Piece::white_piece(PieceType::Queen),
-					'Q' => row.pieces[i] = Piece::black_piece(PieceType::Queen),
-					'k' => row.pieces[i] = Piece::white_piece(PieceType::King),
-					'K' => row.pieces[i] = Piece::black_piece(PieceType::King),
-					'1' => row.pieces[i] = Piece::air(),
+					'p' => {
+						row.pieces[index] = Piece::white_piece(PieceType::Pawn);
+						last_index = Some(index + 1);
+					},
+					'P' => {
+						row.pieces[index] = Piece::black_piece(PieceType::Pawn);
+						last_index = Some(index + 1);
+					},
+					'r' => {
+						row.pieces[index] = Piece::white_piece(PieceType::Rook);
+						last_index = Some(index + 1);
+					},
+					'R' => {
+						row.pieces[index] = Piece::black_piece(PieceType::Rook);
+						last_index = Some(index + 1);
+					},
+					'n' => {
+						row.pieces[index] = Piece::white_piece(PieceType::Knight);
+						last_index = Some(index + 1);
+					},
+					'N' => {
+						row.pieces[index] = Piece::black_piece(PieceType::Knight);
+						last_index = Some(index + 1);
+					},
+					'b' => {
+						row.pieces[index] = Piece::white_piece(PieceType::Bishop);
+						last_index = Some(index + 1);
+					},
+					'B' => {
+						row.pieces[index] = Piece::black_piece(PieceType::Bishop);
+						last_index = Some(index + 1);
+					},
+					'q' => {
+						row.pieces[index] = Piece::white_piece(PieceType::Queen);
+						last_index = Some(index + 1);
+					},
+					'Q' => {
+						row.pieces[index] = Piece::black_piece(PieceType::Queen);
+						last_index = Some(index + 1);
+					},
+					'k' => {
+						row.pieces[index] = Piece::white_piece(PieceType::King);
+						last_index = Some(index + 1);
+					},
+					'K' => {
+						row.pieces[index] = Piece::black_piece(PieceType::King);
+						last_index = Some(index + 1);
+					},
+					'1' => {
+						row.pieces[index] = Piece::air();
+						last_index = Some(index + 1);
+					},
 					'2' => {
 						for offset in 0..2 {
-							row.pieces[i + offset] = Piece::air();
+							row.pieces[index + offset] = Piece::air();
 						}
+						last_index = Some(index + 2);
 					}
 					'3' => {
 						for offset in 0..3 {
-							row.pieces[i + offset] = Piece::air();
+							row.pieces[index + offset] = Piece::air();
 						}
+						last_index = Some(index + 3);
 					}
 					'4' => {
 						for offset in 0..4 {
-							row.pieces[i + offset] = Piece::air();
+							row.pieces[index + offset] = Piece::air();
 						}
+						last_index = Some(index + 4);
 					}
 					'5' => {
 						for offset in 0..5 {
-							row.pieces[i + offset] = Piece::air();
+							row.pieces[index + offset] = Piece::air();
 						}
+						last_index = Some(index + 5);
 					}
 					'6' => {
 						for offset in 0..6 {
-							row.pieces[i + offset] = Piece::air();
+							row.pieces[index + offset] = Piece::air();
 						}
+						last_index = Some(index + 6);
 					}
 					'7' => {
 						for offset in 0..7 {
-							row.pieces[i + offset] = Piece::air();
+							row.pieces[index + offset] = Piece::air();
 						}
+						last_index = Some(index + 7);
 					}
 					'8' => {
 						for offset in 0..8 {
-							row.pieces[i + offset] = Piece::air();
+							row.pieces[index + offset] = Piece::air();
 						}
+						last_index = Some(index + 8);
 					}
 					_ => unreachable!("Unknown values in input FEN notation!")
 				}
@@ -230,27 +287,21 @@ impl Display for Fen {
 impl Display for Row {
 	fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
 		let pieces = self.pieces.iter();
-		let mut count: usize = 0;
 		let mut output_string= String::new();
 
 		for piece in pieces {
-			if piece.piece_type == PieceType::Empty {
-				count += 1;
-				//output_string.push('E');
-				//output_string.push_str(&count.to_string());
-				if count >= 8 {
-					output_string.push_str(&count.to_string());
-					count = 0;
-				}
-			} else {
-				if count != 0 {
-					println!("{count}");
-					output_string.push_str(&count.to_string());
-					count = 0;
-				}
-				output_string.push_str(&piece.to_string());
-			}
+			output_string.push_str(&piece.to_string());
 		}
+		
+		output_string = output_string
+			.replace("________", "8")
+			.replace("_______", "7")
+			.replace("______", "6")
+			.replace("_____", "5")
+			.replace("____", "4")
+			.replace("___", "3")
+			.replace("__", "2")
+			.replace('_', "1");
 
 		write!(f, "{output_string}")
 	}
@@ -302,7 +353,7 @@ impl Display for Piece {
 				}
 			}
 			PieceType::Empty => {
-				write!(f, " ")
+				write!(f, "_")
 			}
 		}
 	}
