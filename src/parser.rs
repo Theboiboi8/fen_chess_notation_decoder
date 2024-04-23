@@ -46,15 +46,13 @@ impl Fen {
 	/// and as of right now king and queen status is not handled,
 	/// and neither is move count and side playing  
 	pub fn from_string(input: &str) -> Self {
-		// TODO: Implement number notation for empty spaces
 		let mut rows = Vec::<Row>::with_capacity(8);
-		//let input = input.to_string();
 		
 		for input_row in input.split('/') {
 			let mut row = Row::empty();
 			
 			for (i, char) in input_row.chars().enumerate() {
-				assert!(i <= 8, "More than 8 characters provided in input row {input_row}");
+				assert!(i <= 7, "More than 8 characters provided in input row {input_row}");
 				
 				match char {
 					'p' => row.pieces[i] = Piece::white_piece(PieceType::Pawn),
@@ -71,53 +69,39 @@ impl Fen {
 					'K' => row.pieces[i] = Piece::black_piece(PieceType::King),
 					'1' => row.pieces[i] = Piece::air(),
 					'2' => {
-						row.pieces[i] = Piece::air();
-						row.pieces[i + 1] = Piece::air();
+						for offset in 0..2 {
+							row.pieces[i + offset] = Piece::air();
+						}
 					}
 					'3' => {
-						row.pieces[i] = Piece::air();
-						row.pieces[i + 1] = Piece::air();
-						row.pieces[i + 2] = Piece::air();
+						for offset in 0..3 {
+							row.pieces[i + offset] = Piece::air();
+						}
 					}
 					'4' => {
-						row.pieces[i] = Piece::air();
-						row.pieces[i + 1] = Piece::air();
-						row.pieces[i + 2] = Piece::air();
-						row.pieces[i + 3] = Piece::air();
+						for offset in 0..4 {
+							row.pieces[i + offset] = Piece::air();
+						}
 					}
 					'5' => {
-						row.pieces[i] = Piece::air();
-						row.pieces[i + 1] = Piece::air();
-						row.pieces[i + 2] = Piece::air();
-						row.pieces[i + 3] = Piece::air();
-						row.pieces[i + 4] = Piece::air();
+						for offset in 0..5 {
+							row.pieces[i + offset] = Piece::air();
+						}
 					}
 					'6' => {
-						row.pieces[i] = Piece::air();
-						row.pieces[i + 1] = Piece::air();
-						row.pieces[i + 2] = Piece::air();
-						row.pieces[i + 3] = Piece::air();
-						row.pieces[i + 4] = Piece::air();
-						row.pieces[i + 5] = Piece::air();
+						for offset in 0..6 {
+							row.pieces[i + offset] = Piece::air();
+						}
 					}
 					'7' => {
-						row.pieces[i] = Piece::air();
-						row.pieces[i + 1] = Piece::air();
-						row.pieces[i + 2] = Piece::air();
-						row.pieces[i + 3] = Piece::air();
-						row.pieces[i + 4] = Piece::air();
-						row.pieces[i + 5] = Piece::air();
-						row.pieces[i + 6] = Piece::air();
+						for offset in 0..7 {
+							row.pieces[i + offset] = Piece::air();
+						}
 					}
 					'8' => {
-						row.pieces[i] = Piece::air();
-						row.pieces[i + 1] = Piece::air();
-						row.pieces[i + 2] = Piece::air();
-						row.pieces[i + 3] = Piece::air();
-						row.pieces[i + 4] = Piece::air();
-						row.pieces[i + 5] = Piece::air();
-						row.pieces[i + 6] = Piece::air();
-						row.pieces[i + 7] = Piece::air();
+						for offset in 0..8 {
+							row.pieces[i + offset] = Piece::air();
+						}
 					}
 					_ => unreachable!("Unknown values in input FEN notation!")
 				}
@@ -230,35 +214,40 @@ impl Default for Piece {
 
 impl Display for Fen {
 	fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+		let mut output_string= String::new();
+		
 		for (i, row) in self.rows.iter().enumerate() {
-			if i == 8 {
-				write!(f, "{row}")?;
-			} else {
-				write!(f, "{row}")?;
-				write!(f, "/")?;
+			output_string.push_str(&row.to_string());
+			if i < 7 {
+				output_string.push('/');
 			}
 		}
-		write!(f, "")
+		
+		write!(f, "{output_string}")
 	}
 }
 
 impl Display for Row {
 	fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
 		let pieces = self.pieces.iter();
-		let mut count: u16 = 0;
-		let mut last_was_empty = false;
+		let mut count: usize = 0;
 		let mut output_string= String::new();
 
 		for piece in pieces {
 			if piece.piece_type == PieceType::Empty {
-				last_was_empty = true;
 				count += 1;
-			} else {
-				if last_was_empty {
+				//output_string.push('E');
+				//output_string.push_str(&count.to_string());
+				if count >= 8 {
 					output_string.push_str(&count.to_string());
 					count = 0;
 				}
-				last_was_empty = false;
+			} else {
+				if count != 0 {
+					println!("{count}");
+					output_string.push_str(&count.to_string());
+					count = 0;
+				}
 				output_string.push_str(&piece.to_string());
 			}
 		}
@@ -313,7 +302,7 @@ impl Display for Piece {
 				}
 			}
 			PieceType::Empty => {
-				write!(f, "_")
+				write!(f, " ")
 			}
 		}
 	}
