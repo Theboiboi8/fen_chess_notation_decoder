@@ -11,7 +11,12 @@ fn main() {
         fs::read_to_string("fen_starting_position_stripped.txt")
             .unwrap_or_default();
 
-    let custom_fen = parser::Fen::from_string(starting_pos_file_stripped.as_str());
+    let variety_test_file =
+        fs::read_to_string("fen_variety_test.txt")
+            .unwrap_or_default();
+
+    let starting_position_file = parser::Fen::from_string(starting_pos_file_stripped.as_str());
+    let variety_test_file = parser::Fen::from_string(variety_test_file.as_str());
 
     println!("{starting_pos_file}");
     println!();
@@ -19,5 +24,13 @@ fn main() {
     println!();
     println!("{}", parser::Fen::default());
     println!();
-    println!("{custom_fen}");
+    println!("{starting_position_file}");
+    println!();
+    println!("{variety_test_file}");
+    println!();
+    println!("{}", parser::Row::empty());
+    println!();
+    for (i, row) in parser::Fen::default().rows.iter().enumerate() {
+        println!("{row}, {i}");
+    }
 }
